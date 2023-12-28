@@ -26,6 +26,7 @@ public class Customer {
     private Integer age;
 
     public Customer() {
+
     }
 
     public Customer(String name, String email, Integer age) {
