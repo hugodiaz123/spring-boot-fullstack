@@ -25,8 +25,7 @@ public class Customer {
     @Column(nullable = false)
     private Integer age;
 
-    public Customer() {
-    }
+    public Customer() {}
 
     public Customer(String name, String email, Integer age) {
         this.name = name;
