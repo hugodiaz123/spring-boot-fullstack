@@ -31,14 +31,14 @@ jobs:
         working-directory: ./backend
 
     steps:
+      ## Clone Repo
+      - uses: actions/checkout@v3
       ## Slack Message
       - name: Send Slack Message
         run: >
           curl -X POST -H 'Content-type: application/json' 
           --data '{"text":"Deployment started :mariodance_pbj: :java_loading:"}' 
           ${{ secrets.SLACK_WEBHOOK_URL }}
-      ## Clone Repo
-      - uses: actions/checkout@v3
       ## Slack Message
       - name: Send Slack Message
         run: > 
