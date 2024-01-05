@@ -29,7 +29,8 @@ class CustomerRepositoryTest extends AbstractTestcontainers {
     void existsCustomerByEmail() {
         //Given
         String name = FAKER.name().firstName();
-        Customer customer = new Customer(name, name + "@gmail.com" + UUID.randomUUID(), "password", FAKER.random().nextInt(17, 100));
+        Customer customer = new Customer(name, name + "@gmail.com" + UUID.randomUUID(), "password",
+                FAKER.random().nextInt(17, 100), Gender.values()[RANDOM.nextInt(2)]);
         underTest.save(customer);
         //When
         boolean actual = underTest.existsCustomerByEmail(customer.getEmail());

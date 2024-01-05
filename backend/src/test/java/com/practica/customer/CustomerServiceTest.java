@@ -45,7 +45,7 @@ class CustomerServiceTest {
     void canGetCustomer() {
         //Given
         int id = 10;
-        Customer customer = new Customer(id, "Alex", "alex@gmail.com", "password", 40);
+        Customer customer = new Customer(id, "Alex", "alex@gmail.com", "password", 40, Gender.MALE);
         when(customerDAO.selectCustomerById(id)).thenReturn(Optional.of(customer));
 
         CustomerDTO expected = customerDTOMapper.apply(customer);
@@ -73,7 +73,7 @@ class CustomerServiceTest {
         String email = "alex@gmail.com";
 
         when(customerDAO.existsPersonWithEmail(email)).thenReturn(false);
-        CustomerRegistrationRequest request = new CustomerRegistrationRequest("Alex", email, "password", 40);
+        CustomerRegistrationRequest request = new CustomerRegistrationRequest("Alex", email, "password", 40, Gender.MALE);
         String passwordHash = "ffljsdkflj453";
         when(passwordEncoder.encode(request.password())).thenReturn(passwordHash);
         //When
@@ -86,8 +86,9 @@ class CustomerServiceTest {
         assertThat(capturedCustomer.getId()).isNull();
         assertThat(capturedCustomer.getName()).isEqualTo(request.name());
         assertThat(capturedCustomer.getEmail()).isEqualTo(request.email());
-        assertThat(capturedCustomer.getAge()).isEqualTo(request.age());
         assertThat(capturedCustomer.getPassword()).isEqualTo(passwordHash);
+        assertThat(capturedCustomer.getAge()).isEqualTo(request.age());
+        assertThat(capturedCustomer.getGender()).isEqualTo(request.gender());
     }
 
     @Test
@@ -96,7 +97,7 @@ class CustomerServiceTest {
         String email = "alex@gmail.com";
 
         when(customerDAO.existsPersonWithEmail(email)).thenReturn(true);
-        CustomerRegistrationRequest request = new CustomerRegistrationRequest("Alex", email, "password", 40);
+        CustomerRegistrationRequest request = new CustomerRegistrationRequest("Alex", email, "password", 40, Gender.MALE);
         //When
         assertThatThrownBy(() -> underTest.addCustomer(request)).isInstanceOf(DuplicateResourceException.class)
                 .hasMessage("The email is already taken");
@@ -131,7 +132,7 @@ class CustomerServiceTest {
     void canUpdateAllCustomerProperties() {
         //Given
         int id = 10;
-        Customer customer = new Customer(id, "Alex", "alex@gmail.com", "password", 40);
+        Customer customer = new Customer(id, "Alex", "alex@gmail.com", "password", 40, Gender.MALE);
         when(customerDAO.selectCustomerById(id)).thenReturn(Optional.of(customer));
 
         String newEmail = "alexandro@gmail.com";
@@ -153,7 +154,7 @@ class CustomerServiceTest {
     void canUpdateOnlyCustomerName() {
         //Given
         int id = 10;
-        Customer customer = new Customer(id, "Alex", "alex@gmail.com", "password", 40);
+        Customer customer = new Customer(id, "Alex", "alex@gmail.com", "password", 40, Gender.MALE);
         when(customerDAO.selectCustomerById(id)).thenReturn(Optional.of(customer));
 
         CustomerUpdateRequest updateRequest = new CustomerUpdateRequest("Alexandro", null, null);
@@ -173,7 +174,7 @@ class CustomerServiceTest {
     void canUpdateOnlyCustomerEmail() {
         //Given
         int id = 10;
-        Customer customer = new Customer(id, "Alex", "alex@gmail.com", "password", 40);
+        Customer customer = new Customer(id, "Alex", "alex@gmail.com", "password", 40, Gender.MALE);
         when(customerDAO.selectCustomerById(id)).thenReturn(Optional.of(customer));
 
         String newEmail = "alex@outlook.com";
@@ -195,7 +196,7 @@ class CustomerServiceTest {
     void canUpdateOnlyCustomerAge() {
         //Given
         int id = 10;
-        Customer customer = new Customer(id, "Alex", "alex@gmail.com", "password", 40);
+        Customer customer = new Customer(id, "Alex", "alex@gmail.com", "password", 40, Gender.MALE);
         when(customerDAO.selectCustomerById(id)).thenReturn(Optional.of(customer));
 
         CustomerUpdateRequest updateRequest = new CustomerUpdateRequest(null, null, 39);
@@ -215,7 +216,7 @@ class CustomerServiceTest {
     void willThrowWhenTryingToUpdateCustomerEmailWhenAlreadyTaken() {
         //Given
         int id = 10;
-        Customer customer = new Customer(id, "Alex", "alex@gmail.com", "password", 40);
+        Customer customer = new Customer(id, "Alex", "alex@gmail.com", "password", 40, Gender.MALE);
         when(customerDAO.selectCustomerById(id)).thenReturn(Optional.of(customer));
 
         String newEmail = "alex@outlook.com";
@@ -235,7 +236,7 @@ class CustomerServiceTest {
         String email = "alex@gmail.com";
         int age = 40;
         int id = 10;
-        Customer customer = new Customer(id, name, email, "password", age);
+        Customer customer = new Customer(id, name, email, "password", age, Gender.MALE);
         when(customerDAO.selectCustomerById(id)).thenReturn(Optional.of(customer));
 
         CustomerUpdateRequest updateRequest = new CustomerUpdateRequest(name, email, age);
