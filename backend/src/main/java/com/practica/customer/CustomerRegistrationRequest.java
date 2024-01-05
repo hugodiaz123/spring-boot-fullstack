@@ -1,3 +1,3 @@
 package com.practica.customer;
 
-public record CustomerRegistrationRequest(String name, String email, Integer age) {}
+public record CustomerRegistrationRequest(String name, String email, String password, Integer age) {}

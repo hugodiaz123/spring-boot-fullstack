@@ -1,6 +1,5 @@
 package com.practica.customer;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.sql.ResultSet;
@@ -24,7 +23,7 @@ class CustomerRowMapperTest {
         //When
         Customer actual = customerRowMapper.mapRow(resultSet, 1);
         //Then
-        Customer expected = new Customer(1, "Alex", "alex@gmail.com", 20);
+        Customer expected = new Customer(1, "Alex", "alex@gmail.com", "password", 20);
         assertThat(actual).isEqualTo(expected);
     }
 }

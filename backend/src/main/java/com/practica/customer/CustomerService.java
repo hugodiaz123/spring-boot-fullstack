@@ -4,25 +4,33 @@ import com.practica.exception.DuplicateResourceException;
 import com.practica.exception.RequestValidationException;
 import com.practica.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CustomerService {
 
     private final CustomerDAO customerDAO;
+    private final CustomerDTOMapper customerDTOMapper;
+    private final PasswordEncoder passwordEncoder;
 
-    public CustomerService(@Qualifier("jdbc") CustomerDAO customerDAO) {
+    public CustomerService(@Qualifier("jdbc") CustomerDAO customerDAO, CustomerDTOMapper customerDTOMapper, PasswordEncoder passwordEncoder) {
         this.customerDAO = customerDAO;
+        this.customerDTOMapper = customerDTOMapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
-    public List<Customer> getAllCustomers() {
-        return customerDAO.selectAllCustomers();
+    public List<CustomerDTO> getAllCustomers() {
+        return customerDAO.selectAllCustomers().stream()
+                .map(customerDTOMapper)
+                .collect(Collectors.toList());
     }
 
-    public Customer getCustomer(Integer id) {
-        return customerDAO.selectCustomerById(id)
+    public CustomerDTO getCustomer(Integer id) {
+        return customerDAO.selectCustomerById(id).map(customerDTOMapper)
                 .orElseThrow(() -> new ResourceNotFoundException("Customer [%d] not found".formatted(id)));
     }
 
@@ -31,7 +39,12 @@ public class CustomerService {
             throw new DuplicateResourceException("The email is already taken");
         }
 
-        customerDAO.insertCustomer(new Customer(customerRegistrationRequest.name(), customerRegistrationRequest.email(), customerRegistrationRequest.age()));
+        customerDAO.insertCustomer(new Customer(
+                customerRegistrationRequest.name(),
+                customerRegistrationRequest.email(),
+                passwordEncoder.encode(customerRegistrationRequest.password()),
+                customerRegistrationRequest.age()
+        ));
     }
 
     public void deleteCustomer(Integer id) {
@@ -41,7 +54,8 @@ public class CustomerService {
 
 
     public void updateCustomer(Integer customerId, CustomerUpdateRequest updateRequest) {
-        Customer customer = getCustomer(customerId);
+        Customer customer = customerDAO.selectCustomerById(customerId)
+                .orElseThrow(() -> new ResourceNotFoundException("Customer [%d] not found".formatted(customerId)));
 
         boolean changes = false;
 

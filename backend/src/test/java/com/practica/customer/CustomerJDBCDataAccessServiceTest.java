@@ -1,18 +1,14 @@
 package com.practica.customer;
 
-import com.github.javafaker.Faker;
 import com.practica.AbstractTestcontainers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 class CustomerJDBCDataAccessServiceTest extends AbstractTestcontainers {
 
@@ -28,7 +24,7 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestcontainers {
     void selectAllCustomers() {
         //Given
         String name = FAKER.name().firstName();
-        Customer customer = new Customer(name, name + "@gmail.com" + UUID.randomUUID(), FAKER.random().nextInt(17, 100));
+        Customer customer = new Customer(name, name + "@gmail.com" + UUID.randomUUID(), "password", FAKER.random().nextInt(17, 100));
         underTest.insertCustomer(customer);
         //When
         List<Customer> actual = underTest.selectAllCustomers();
@@ -41,7 +37,7 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestcontainers {
         //Given
         String name = FAKER.name().firstName();
         String email = name + "@gmail.com" + UUID.randomUUID();
-        Customer customer = new Customer(name, email, FAKER.random().nextInt(17, 100));
+        Customer customer = new Customer(name, email, "password", FAKER.random().nextInt(17, 100));
         underTest.insertCustomer(customer);
         Integer id = underTest.selectAllCustomers().stream().filter(c -> c.getEmail().equals(email)).map(Customer::getId).findFirst().orElseThrow();
         //When
@@ -69,7 +65,7 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestcontainers {
     void insertCustomer() {
         //Given
         String name = FAKER.name().firstName();
-        Customer customer = new Customer(name, name + "@gmail.com" + UUID.randomUUID(), FAKER.random().nextInt(17, 100));
+        Customer customer = new Customer(name, name + "@gmail.com" + UUID.randomUUID(), "password", FAKER.random().nextInt(17, 100));
         underTest.insertCustomer(customer);
         //When
         List<Customer> actual = underTest.selectAllCustomers();
@@ -82,7 +78,7 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestcontainers {
         //Given
         String name = FAKER.name().firstName();
         String email = name + "@gmail.com" + UUID.randomUUID();
-        Customer customer = new Customer(name, email, FAKER.random().nextInt(17, 100));
+        Customer customer = new Customer(name, email, "password", FAKER.random().nextInt(17, 100));
         underTest.insertCustomer(customer);
         //When
         boolean actual = underTest.existsPersonWithEmail(email);
@@ -105,7 +101,7 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestcontainers {
         //Given
         String name = FAKER.name().firstName();
         String email = name + "@gmail.com" + UUID.randomUUID();
-        Customer customer = new Customer(name, email, FAKER.random().nextInt(17, 100));
+        Customer customer = new Customer(name, email, "password", FAKER.random().nextInt(17, 100));
         underTest.insertCustomer(customer);
         Integer id = underTest.selectAllCustomers().stream().filter(c -> c.getEmail().equals(email)).map(Customer::getId).findFirst().orElseThrow();
         //When
@@ -129,7 +125,7 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestcontainers {
         //Given
         String name = FAKER.name().firstName();
         String email = name + "@gmail.com" + UUID.randomUUID();
-        Customer customer = new Customer(name, email, FAKER.random().nextInt(17, 100));
+        Customer customer = new Customer(name, email, "password", FAKER.random().nextInt(17, 100));
         underTest.insertCustomer(customer);
         Integer id = underTest.selectAllCustomers().stream().filter(c -> c.getEmail().equals(email)).map(Customer::getId).findFirst().orElseThrow();
         //When
@@ -145,7 +141,7 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestcontainers {
         String name = FAKER.name().firstName();
         String email = name + "@gmail.com" + UUID.randomUUID();
         Integer age = FAKER.random().nextInt(17, 100);
-        Customer customer = new Customer(name, email, age);
+        Customer customer = new Customer(name, email, "password", age);
         underTest.insertCustomer(customer);
         Integer id = underTest.selectAllCustomers().stream().filter(c -> c.getEmail().equals(email)).map(Customer::getId).findFirst().orElseThrow();
         String newName = "foo";
@@ -169,7 +165,7 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestcontainers {
         String name = FAKER.name().firstName();
         String email = name + "@gmail.com" + UUID.randomUUID();
         Integer age = FAKER.random().nextInt(17, 100);
-        Customer customer = new Customer(name, email, age);
+        Customer customer = new Customer(name, email, "password", age);
         underTest.insertCustomer(customer);
         Integer id = underTest.selectAllCustomers().stream().filter(c -> c.getEmail().equals(email)).map(Customer::getId).findFirst().orElseThrow();
         String newEmail = name + "@gmail.com" + UUID.randomUUID();
@@ -193,7 +189,7 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestcontainers {
         String name = FAKER.name().firstName();
         String email = name + "@gmail.com" + UUID.randomUUID();
         Integer age = FAKER.random().nextInt(17, 100);
-        Customer customer = new Customer(name, email, age);
+        Customer customer = new Customer(name, email, "password", age);
         underTest.insertCustomer(customer);
         Integer id = underTest.selectAllCustomers().stream().filter(c -> c.getEmail().equals(email)).map(Customer::getId).findFirst().orElseThrow();
         Integer newAge = FAKER.random().nextInt(17, 100);
@@ -217,7 +213,7 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestcontainers {
         String name = FAKER.name().firstName();
         String email = name + "@gmail.com" + UUID.randomUUID();
         Integer age = FAKER.random().nextInt(17, 100);
-        Customer customer = new Customer(name, email, age);
+        Customer customer = new Customer(name, email, "password", age);
         underTest.insertCustomer(customer);
         Integer id = underTest.selectAllCustomers().stream().filter(c -> c.getEmail().equals(email)).map(Customer::getId).findFirst().orElseThrow();
         //When
