@@ -3,6 +3,12 @@ server:
   error:
     include-message: always
 
+cors:
+  allowed-origins: "*"
+  allowed-methods: "*"
+  allowed-header: "*"
+  exposed-header: "*"
+
 spring:
   main:
     web-application-type: servlet
