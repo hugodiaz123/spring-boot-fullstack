@@ -43,7 +43,8 @@ public class CustomerService {
                 customerRegistrationRequest.name(),
                 customerRegistrationRequest.email(),
                 passwordEncoder.encode(customerRegistrationRequest.password()),
-                customerRegistrationRequest.age()
+                customerRegistrationRequest.age(),
+                customerRegistrationRequest.gender()
         ));
     }
 

@@ -2,10 +2,7 @@ package com.practica.journey;
 
 import com.github.javafaker.Faker;
 import com.github.javafaker.Name;
-import com.practica.customer.Customer;
-import com.practica.customer.CustomerDTO;
-import com.practica.customer.CustomerRegistrationRequest;
-import com.practica.customer.CustomerUpdateRequest;
+import com.practica.customer.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,6 +13,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -33,12 +31,14 @@ public class CustomerIT {
         // create registration request
         Faker faker = new Faker();
         Name fakerName = faker.name();
+        Random random = new Random();
 
         String name = fakerName.fullName();
         String email = fakerName.lastName() + UUID.randomUUID() + "@test.com";
         Integer age = faker.random().nextInt(1, 100);
+        Gender gender = Gender.values()[random.nextInt(2)];
 
-        CustomerRegistrationRequest request = new CustomerRegistrationRequest(name, email, "password", age);
+        CustomerRegistrationRequest request = new CustomerRegistrationRequest(name, email, "password", age, gender);
         // send a post request
         String jwtToken = webTestClient.post()
                 .uri(CUSTOMER_URI)
@@ -69,7 +69,7 @@ public class CustomerIT {
         // make sure that customer is present
 
         int id = allCustomers.stream().filter(c -> c.email().equals(email)).map(CustomerDTO::id).findFirst().orElseThrow();
-        CustomerDTO expectedCustomer = new CustomerDTO(id, name, email, age, List.of("ROLE_USER"), email);
+        CustomerDTO expectedCustomer = new CustomerDTO(id, name, email, age, gender, List.of("ROLE_USER"), email);
 
         assertThat(allCustomers).contains(expectedCustomer);
 
@@ -93,13 +93,15 @@ public class CustomerIT {
         // create registration request
         Faker faker = new Faker();
         Name fakerName = faker.name();
+        Random random = new Random();
 
         String name = fakerName.fullName();
         String email = fakerName.lastName() + UUID.randomUUID() + "@test.com";
         Integer age = faker.random().nextInt(1, 100);
+        Gender gender = Gender.values()[random.nextInt(2)];
 
-        CustomerRegistrationRequest request = new CustomerRegistrationRequest(name, email, "password", age);
-        CustomerRegistrationRequest request2 = new CustomerRegistrationRequest(name, email + "2", "password", age);
+        CustomerRegistrationRequest request = new CustomerRegistrationRequest(name, email, "password", age, gender);
+        CustomerRegistrationRequest request2 = new CustomerRegistrationRequest(name, email + "2", "password", age, gender);
 
         // send a post request to create customer 1
         webTestClient.post()
@@ -165,12 +167,14 @@ public class CustomerIT {
         // create registration request
         Faker faker = new Faker();
         Name fakerName = faker.name();
+        Random random = new Random();
 
         String name = fakerName.fullName();
         String email = fakerName.lastName() + UUID.randomUUID() + "@test.com";
         Integer age = faker.random().nextInt(1, 100);
+        Gender gender = Gender.values()[random.nextInt(2)];
 
-        CustomerRegistrationRequest request = new CustomerRegistrationRequest(name, email, "password", age);
+        CustomerRegistrationRequest request = new CustomerRegistrationRequest(name, email, "password", age, gender);
         // send a post request
         String jwtToken = webTestClient.post()
                 .uri(CUSTOMER_URI)
@@ -226,7 +230,7 @@ public class CustomerIT {
                 .returnResult()
                 .getResponseBody();
 
-        CustomerDTO expectedCustomer = new CustomerDTO(id, newName, email, age, List.of("ROLE_USER"), email);
+        CustomerDTO expectedCustomer = new CustomerDTO(id, newName, email, age, gender, List.of("ROLE_USER"), email);
 
         assertThat(updatedCustomer).isEqualTo(expectedCustomer);
     }

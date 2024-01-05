@@ -3,6 +3,7 @@ package com.practica;
 import com.github.javafaker.Faker;
 import com.practica.customer.Customer;
 import com.practica.customer.CustomerRepository;
+import com.practica.customer.Gender;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -29,7 +30,8 @@ public class Main {
                     name,
                     name.toLowerCase() + "@gmail.com",
                     passwordEncoder.encode(UUID.randomUUID().toString()),
-                    random.nextInt(16, 99));
+                    random.nextInt(16, 99),
+                    Gender.values()[random.nextInt(2)]);
 
             customerRepository.save(customer);
         };

@@ -12,6 +12,7 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import javax.sql.DataSource;
+import java.util.Random;
 
 @Testcontainers
 public abstract class AbstractTestcontainers {
@@ -53,4 +54,5 @@ public abstract class AbstractTestcontainers {
     }
 
     protected static final Faker FAKER = new Faker();
+    protected static final Random RANDOM = new Random();
 }
