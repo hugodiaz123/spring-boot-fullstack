@@ -24,24 +24,25 @@ public class CustomerIT {
 
     @Autowired
     private WebTestClient webTestClient;
-    private static final String CUSTOMER_URI = "/api/v1/customers";
+    private static final String CUSTOMER_PATH = "/api/v1/customers";
+    private static final Random RANDOM = new Random();
+
 
     @Test
     void canRegisterACustomer() {
         // create registration request
         Faker faker = new Faker();
         Name fakerName = faker.name();
-        Random random = new Random();
 
         String name = fakerName.fullName();
         String email = fakerName.lastName() + UUID.randomUUID() + "@test.com";
         Integer age = faker.random().nextInt(1, 100);
-        Gender gender = Gender.values()[random.nextInt(2)];
+        Gender gender = Gender.values()[RANDOM.nextInt(2)];
 
         CustomerRegistrationRequest request = new CustomerRegistrationRequest(name, email, "password", age, gender);
         // send a post request
         String jwtToken = webTestClient.post()
-                .uri(CUSTOMER_URI)
+                .uri(CUSTOMER_PATH)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(Mono.just(request), CustomerRegistrationRequest.class)
@@ -55,7 +56,7 @@ public class CustomerIT {
 
         // get all customers
         List<CustomerDTO> allCustomers = webTestClient.get()
-                .uri(CUSTOMER_URI)
+                .uri(CUSTOMER_PATH)
                 .accept(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", jwtToken))
                 .exchange()
@@ -76,7 +77,7 @@ public class CustomerIT {
         // get customer by id
 
         webTestClient.get()
-                .uri(CUSTOMER_URI + "/{id}", id)
+                .uri(CUSTOMER_PATH + "/{id}", id)
                 .accept(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", jwtToken))
                 .exchange()
@@ -93,19 +94,18 @@ public class CustomerIT {
         // create registration request
         Faker faker = new Faker();
         Name fakerName = faker.name();
-        Random random = new Random();
 
         String name = fakerName.fullName();
         String email = fakerName.lastName() + UUID.randomUUID() + "@test.com";
         Integer age = faker.random().nextInt(1, 100);
-        Gender gender = Gender.values()[random.nextInt(2)];
+        Gender gender = Gender.values()[RANDOM.nextInt(2)];
 
         CustomerRegistrationRequest request = new CustomerRegistrationRequest(name, email, "password", age, gender);
         CustomerRegistrationRequest request2 = new CustomerRegistrationRequest(name, email + "2", "password", age, gender);
 
         // send a post request to create customer 1
         webTestClient.post()
-                .uri(CUSTOMER_URI)
+                .uri(CUSTOMER_PATH)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(Mono.just(request), CustomerRegistrationRequest.class)
@@ -115,7 +115,7 @@ public class CustomerIT {
 
         // send a post request to create customer 2
         String jwtToken = webTestClient.post()
-                .uri(CUSTOMER_URI)
+                .uri(CUSTOMER_PATH)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(Mono.just(request2), CustomerRegistrationRequest.class)
@@ -129,7 +129,7 @@ public class CustomerIT {
 
         // get all customers
         List<CustomerDTO> allCustomers = webTestClient.get()
-                .uri(CUSTOMER_URI)
+                .uri(CUSTOMER_PATH)
                 .accept(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", jwtToken))
                 .exchange()
@@ -145,7 +145,7 @@ public class CustomerIT {
         int id = allCustomers.stream().filter(c -> c.email().equals(email)).map(CustomerDTO::id).findFirst().orElseThrow();
 
         webTestClient.delete()
-                .uri(CUSTOMER_URI + "/{id}", id)
+                .uri(CUSTOMER_PATH + "/{id}", id)
                 .accept(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", jwtToken))
                 .exchange()
@@ -154,7 +154,7 @@ public class CustomerIT {
 
         // get customer by id
         webTestClient.get()
-                .uri(CUSTOMER_URI + "/{id}", id)
+                .uri(CUSTOMER_PATH + "/{id}", id)
                 .accept(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", jwtToken))
                 .exchange()
@@ -167,17 +167,16 @@ public class CustomerIT {
         // create registration request
         Faker faker = new Faker();
         Name fakerName = faker.name();
-        Random random = new Random();
 
         String name = fakerName.fullName();
         String email = fakerName.lastName() + UUID.randomUUID() + "@test.com";
         Integer age = faker.random().nextInt(1, 100);
-        Gender gender = Gender.values()[random.nextInt(2)];
+        Gender gender = Gender.values()[RANDOM.nextInt(2)];
 
         CustomerRegistrationRequest request = new CustomerRegistrationRequest(name, email, "password", age, gender);
         // send a post request
         String jwtToken = webTestClient.post()
-                .uri(CUSTOMER_URI)
+                .uri(CUSTOMER_PATH)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(Mono.just(request), CustomerRegistrationRequest.class)
@@ -191,7 +190,7 @@ public class CustomerIT {
 
         // get all customers
         List<CustomerDTO> allCustomers = webTestClient.get()
-                .uri(CUSTOMER_URI)
+                .uri(CUSTOMER_PATH)
                 .accept(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", jwtToken))
                 .exchange()
@@ -209,7 +208,7 @@ public class CustomerIT {
         CustomerUpdateRequest updateRequest = new CustomerUpdateRequest(newName, null, null);
 
         webTestClient.put()
-                .uri(CUSTOMER_URI + "/{id}", id)
+                .uri(CUSTOMER_PATH + "/{id}", id)
                 .accept(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", jwtToken))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -220,7 +219,7 @@ public class CustomerIT {
 
         // get customer by id
         CustomerDTO updatedCustomer = webTestClient.get()
-                .uri(CUSTOMER_URI + "/{id}", id)
+                .uri(CUSTOMER_PATH + "/{id}", id)
                 .accept(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", jwtToken))
                 .exchange()
