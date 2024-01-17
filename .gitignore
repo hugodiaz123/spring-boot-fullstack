@@ -1,5 +1,18 @@
 **/target/
 **/.idea/
-**/node_modules
 **/*.iml
-frontend/
+**/frontend
+
+#Angular
+**/.angular/cache
+**/.sass-cache/
+**/connect.lock
+**/coverage
+**/libpeerconnection.log
+**/testem.log
+**/typings
+
+# Node
+**/node_modules
+**/npm-debug.log
+**/yarn-error.log
