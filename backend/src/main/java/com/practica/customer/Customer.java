@@ -37,7 +37,9 @@ public class Customer implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    public Customer() {}
+    public Customer() {
+
+    }
 
     public Customer(String name, String email, String password, Integer age, Gender gender) {
         this.name = name;
