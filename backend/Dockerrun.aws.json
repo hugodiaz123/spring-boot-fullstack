@@ -3,7 +3,7 @@
   "containerDefinitions": [
     {
       "name": "amigoscode-api",
-      "image": "hugodiaz/amigoscode-api:30.12.2023.00.06.03",
+      "image": "hugodiaz/amigoscode-api:17.01.2024.20.10.08",
       "essential": true,
       "memory": 512,
       "portMappings": [
@@ -15,7 +15,7 @@
       "environment": [
         {
           "name": "SPRING_DATASOURCE_URL",
-          "value": "jdbc:postgresql://awseb-e-c6nudugub4-stack-awsebrdsdatabase-n0fo0mx89s2k.cyf54tzycaa1.us-east-2.rds.amazonaws.com:5432/customer"
+          "value": "jdbc:postgresql://awseb-e-7cbwurfuif-stack-awsebrdsdatabase-v5kvascyvnpo.cyf54tzycaa1.us-east-2.rds.amazonaws.com:5432/ebdb"
         }
       ]
     }
